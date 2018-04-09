@@ -19,8 +19,8 @@ esbHost=$esbHost
 esbPort=$esbPort
 bpsHost=$bpsHost
 bpsPort=$bpsPort
-mbHost-$mbHost
-mbPort-$mbPort
+mbHost=$mbHost
+mbPort=$mbPort
 analyticsHost=$analyticsHost
 analyticsPort=$analyticsPort
 
