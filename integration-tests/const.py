@@ -38,7 +38,7 @@ LIB_PATH = "repository/lib"
 DISTRIBUTION_PATH = {"product-apim": "modules/distribution/product/target",
                      "product-is": "modules/distribution/target",
                      "product-ei": "distribution/target"}
-INTEGRATION_PATH = {"product-apim": "modules/api-import-export",
+INTEGRATION_PATH = {"product-apim": "modules/integration",
                     "product-is": "modules/integration",
                     "product-ei": "integration"}
 PRODUCT_STORAGE_DIR_NAME = "storage"

@@ -331,7 +331,7 @@ def get_dist_name():
 def setup_databases(db_names):
     """Create required databases.
     """
-    base_path = Path(workspace + "/" + PRODUCT_STORAGE_DIR_NAME + "/" + dist_name)
+    base_path = Path(workspace + "/" + PRODUCT_STORAGE_DIR_NAME + "/" + dist_name + "/")
     engine = db_engine.upper()
     db_meta_data = get_db_meta_data(engine)
     if db_meta_data:
@@ -600,9 +600,9 @@ def main():
         if db_names is None or not db_names:
             raise Exception("Failed the product configuring")
         setup_databases(db_names)
-        # if product_id == "product-apim":
-            # module_path = Path(workspace + "/" + product_id + "/" + 'modules/api-import-export')
-            # build_module(module_path)
+        if product_id == "product-apim":
+            module_path = Path(workspace + "/" + product_id + "/" + 'modules/api-import-export')
+            build_module(module_path)
         intg_module_path = Path(workspace + "/" + product_id + "/" + INTEGRATION_PATH[product_id])
         build_module(intg_module_path)
         save_log_files()
