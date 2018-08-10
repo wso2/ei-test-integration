@@ -25,7 +25,7 @@ M2_PATH = {"product-is": "is/wso2is", "product-apim": "am/wso2am",
            "product-ei": "ei/wso2ei"}
 DIST_POM_PATH = {"product-is": "modules/distribution/pom.xml", "product-apim": "modules/distribution/product/pom.xml",
                  "product-ei": "distribution/pom.xml"}
-LIB_PATH = "repository/lib"
+LIB_PATH = "lib"
 DISTRIBUTION_PATH = {"product-apim": "modules/distribution/product/target",
                      "product-is": "modules/distribution/target",
                      "product-ei": "distribution/target"}
