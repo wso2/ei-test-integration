@@ -61,7 +61,7 @@ DB_META_DATA = {
                   "product-is": {},
                   "product-ei": {"WSO2_CARBON_DB": ['dbscripts/mysql5.7.sql'],
                                  "WSO2_MB_STORE_DB": ['wso2/broker/dbscripts/mb-store/mysql-mb.sql'],
-                                 "WSO2_CARBON_DB_BROKER": ['wso2ei-6.4.0-m6/wso2/broker/dbscripts/mysql5.7.sql']
+                                 "WSO2_CARBON_DB_BROKER": ['wso2/broker/dbscripts/mysql5.7.sql']
                                  }}},
 
     "SQLSERVER-SE": {"prefix": "jdbc:sqlserver://",
@@ -71,7 +71,7 @@ DB_META_DATA = {
                          "product-is": {},
                          "product-ei": {"WSO2_CARBON_DB": ['dbscripts/mssql.sql'],
                                         "WSO2_MB_STORE_DB": ['wso2/broker/dbscripts/mb-store/mssql-mb.sql'],
-                                        "WSO2_CARBON_DB_BROKER": ['wso2ei-6.4.0-m6/wso2/broker/dbscripts/mssql.sql']
+                                        "WSO2_CARBON_DB_BROKER": ['wso2/broker/dbscripts/mssql.sql']
                                         }}},
 
     "ORACLE-SE2": {"prefix": "jdbc:oracle:thin:@", "driverClassName": "oracle.jdbc.OracleDriver",
@@ -81,7 +81,7 @@ DB_META_DATA = {
                        "product-is": {},
                        "product-ei": {"WSO2_CARBON_DB": ['dbscripts/oracle.sql'],
                                       "WSO2_MB_STORE_DB": ['wso2/broker/dbscripts/mb-store/oracle-mb.sql'],
-                                      "WSO2_CARBON_DB_BROKER": ['wso2ei-6.4.0-m6/wso2/broker/dbscripts/oracle.sql']
+                                      "WSO2_CARBON_DB_BROKER": ['wso2/broker/dbscripts/oracle.sql']
                                       }}},
 
     "POSTGRESQL": {"prefix": "jdbc:postgresql://", "driverClassName": "org.postgresql.Driver",
@@ -89,5 +89,5 @@ DB_META_DATA = {
                    "DB_SETUP": {"product-apim": {},
                                 "product-is": {},
                                 "product-ei": {"WSO2_CARBON_DB": ['dbscripts/postgresql.sql'],
-                                               "WSO2_CARBON_DB_BROKER": ['wso2ei-6.4.0-m6/wso2/broker/dbscripts/postgresql.sql']}
+                                               "WSO2_CARBON_DB_BROKER": ['wso2/broker/dbscripts/postgresql.sql']}
                                                 }}}
