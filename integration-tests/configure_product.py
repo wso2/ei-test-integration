@@ -167,7 +167,7 @@ def modify_datasources():
                 if child.tag == 'name':
                     database_name = child.text
 
-                    if product_id == 'product-ei' and profile_name:
+                    if product_id == 'product-ei' and profile_name != None:
                         database_name = database_name + "_" + profile_name.upper()
 
                 # special checking for namespace object content:media
