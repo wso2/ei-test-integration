@@ -233,7 +233,7 @@ def configure_product(name, id, db_config, ws, product_version):
         configured_dist_storing_loc = Path(target_dir_abs_path / dist_name)
 
         extract_product(storage_zip_abs_path)
-        copy_jar_file(Path(database_config['sql_driver_location']), Path(storage_dist_abs_path / LIB_PATH))
+        copy_jar_file(Path(database_config['sql_driver_location']), Path(storage_dist_abs_path / LIB_PATH[product_id]))
         if datasource_paths is not None:
             modify_datasources()
         else:
