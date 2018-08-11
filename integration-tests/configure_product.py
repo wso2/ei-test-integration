@@ -147,6 +147,7 @@ def modify_pom_files():
 def modify_datasources():
     """Modify datasources files which are defined in the const.py. DB ulr, uname, pwd, driver class values are modifying.
     """
+    global profile_name
     for data_source in datasource_paths:
         file_path = Path(storage_dist_abs_path / data_source)
         if sys.platform.startswith('win'):
