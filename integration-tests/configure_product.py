@@ -40,6 +40,7 @@ workspace = None
 sql_driver_location = None
 product_id = None
 database_names = []
+profile_name = None
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -150,6 +151,12 @@ def modify_datasources():
         file_path = Path(storage_dist_abs_path / data_source)
         if sys.platform.startswith('win'):
             file_path = winapi_path(file_path)
+
+        if product_id == 'product-ei':
+            profiles = data_source.split("/")
+            if profiles[0] == 'wso2':
+                profile_name = profiles[1]
+
         logger.info("Modifying datasource: " + str(file_path))
         artifact_tree = ET.parse(file_path)
         artifarc_root = artifact_tree.getroot()
@@ -159,6 +166,10 @@ def modify_datasources():
             for child in item:
                 if child.tag == 'name':
                     database_name = child.text
+
+                    if product_id == 'product-ei' and profile_name:
+                        database_name = database_name + "_" + profile_name.upper()
+
                 # special checking for namespace object content:media
                 if child.tag == 'definition' and database_name:
                     configuration = child.find('configuration')
