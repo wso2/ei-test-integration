@@ -17,25 +17,20 @@ ZIP_FILE_EXTENSION = ".zip"
 CARBON_NAME = "carbon.zip"
 VALUE_TAG = "{http://maven.apache.org/POM/4.0.0}value"
 SURFACE_PLUGIN_ARTIFACT_ID = "maven-surefire-plugin"
-DATASOURCE_PATHS = {"product-apim": [],
-                    "product-is": [],
-                    "product-ei": ["conf/datasources/master-datasources.xml",
-                                   "conf/datasources/custom-datasources.xml",
-                                   "wso2/broker/conf/datasources/master-datasources.xml",
-                                   "wso2/broker/conf/datasources/metrics-datasources.xml",
-                                   "wso2/business-process/conf/datasources/master-datasources.xml",
-                                   "wso2/business-process/conf/datasources/bps-datasources.xml",
-                                   "wso2/business-process/conf/datasources/activiti-datasources.xml",
-                                   "wso2/analytics/conf/datasources/analytics-datasources.xml",
-                                   "wso2/analytics/conf/datasources/master-datasources.xml",
-                                   "wso2/analytics/conf/datasources/metrics-datasources.xml",
-                                   "wso2/micro-integrator/conf/datasources/master-datasources.xml",
-                                   "wso2/msf4j/conf/datasources/metrics-datasources.xml"]}
+DATASOURCE_PATHS = {"product-apim": {},
+                    "product-is": {},
+                    "product-ei": {"CORE": ["conf/datasources/master-datasources.xml"],
+                                   "BROKER": ["wso2/broker/conf/datasources/master-datasources.xml",
+                                              "wso2/broker/conf/datasources/metrics-datasources.xml"],
+                                   "BPS": ["wso2/business-process/conf/datasources/master-datasources.xml",
+                                           "wso2/business-process/conf/datasources/bps-datasources.xml",
+                                           "wso2/business-process/conf/datasources/activiti-datasources.xml"]},
+                    }
 M2_PATH = {"product-is": "is/wso2is", "product-apim": "am/wso2am",
            "product-ei": "ei/wso2ei"}
 DIST_POM_PATH = {"product-is": "modules/distribution/pom.xml", "product-apim": "modules/distribution/product/pom.xml",
                  "product-ei": "distribution/pom.xml"}
-LIB_PATH = "repository/lib"
+LIB_PATH = "lib"
 DISTRIBUTION_PATH = {"product-apim": "modules/distribution/product/target",
                      "product-is": "modules/distribution/target",
                      "product-ei": "distribution/target"}
@@ -57,38 +52,47 @@ DB_META_DATA = {
               "DB_SETUP": {
                   "product-apim": {},
                   "product-is": {},
-                  "product-ei": {"WSO2_CARBON_DB": ['dbscripts/mysql5.7.sql'],
-                                 "WSO2_MB_STORE_DB": ['wso2/broker/dbscripts/mb-store/mysql-mb.sql'],
-                                 "BPS_DS": ['wso2/business-process/dbscripts/bps/bpel/create/mysql.sql'],
-                                 "ACTIVITI_DB": ['wso2/business-process/dbscripts/bps/bpmn/create/activiti.mysql.create.identity.sql'],
-                                 "WSO2_METRICS_DB": ['wso2/broker/dbscripts/metrics/mysql.sql']}}},
+                  "product-ei": {"WSO2_CARBON_DB_CORE": ['dbscripts/mysql5.7.sql'],
+                                 "WSO2_CARBON_DB_BROKER": ['wso2/broker/dbscripts/mysql5.7.sql'],
+                                 "WSO2_CARBON_DB_BPS": ['wso2/business-process/dbscripts/mysql5.7.sql'],
+                                 "WSO2_MB_STORE_DB_BROKER": ['wso2/broker/dbscripts/mb-store/mysql-mb.sql'],
+                                 "WSO2_METRICS_DB_BROKER": ['wso2/broker/dbscripts/metrics/mysql.sql'],
+                                 "BPS_DS_BPS": ['wso2/business-process/dbscripts/bps/bpel/create/mysql.sql'],
+                                 "ACTIVITI_DB_BPS": [
+                                     'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mysql.create.identity.sql'],
+                                 }}},
 
     "SQLSERVER-SE": {"prefix": "jdbc:sqlserver://",
                      "driverClassName": "com.microsoft.sqlserver.jdbc.SQLServerDriver", "jarName": "sqlserver-ex.jar",
                      "DB_SETUP": {
                          "product-apim": {},
                          "product-is": {},
-                         "product-ei": {"WSO2_CARBON_DB": ['dbscripts/mssql.sql'],
-                                        "WSO2_MB_STORE_DB": ['wso2/broker/dbscripts/mb-store/mssql-mb.sql'],
-                                        "BPS_DS": ['wso2/business-process/dbscripts/bps/bpel/create/mssql.sql'],
-                                        "ACTIVITI_DB": ['wso2/business-process/dbscripts/bps/bpmn/create/activiti.mssql.create.identity.sql']}}},
+                         "product-ei": {"WSO2_CARBON_DB_CORE": ['dbscripts/mssql.sql'],
+                                        "WSO2_CARBON_DB_BROKER": ['wso2/broker/dbscripts/mssql.sql'],
+                                        "WSO2_CARBON_DB_BPS": ['wso2/business-process/dbscripts/mssql.sql'],
+                                        "WSO2_MB_STORE_DB_BROKER": ['wso2/broker/dbscripts/mb-store/mssql-mb.sql'],
+                                        "WSO2_METRICS_DB_BROKER": ['wso2/broker/dbscripts/metrics/mssql.sql'],
+                                        "BPS_DS_BPS": ['wso2/business-process/dbscripts/bps/bpel/create/mssql.sql'],
+                                        "ACTIVITI_DB_BPS": [
+                                            'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mssql.create.identity.sql']}}},
 
     "ORACLE-SE2": {"prefix": "jdbc:oracle:thin:@", "driverClassName": "oracle.jdbc.OracleDriver",
                    "jarName": "oracle-se.jar",
                    "DB_SETUP": {
                        "product-apim": {},
                        "product-is": {},
-                       "product-ei": {"WSO2_CARBON_DB": ['dbscripts/oracle.sql'],
-                                      "WSO2_MB_STORE_DB": ['wso2/broker/dbscripts/mb-store/oracle-mb.sql'],
-                                      "BPS_DS": ['wso2/business-process/dbscripts/bps/bpel/create/oracle.sql'],
-                                      "ACTIVITI_DB": ['wso2/business-process/dbscripts/bps/bpmn/create/activiti.oracle.create.identity.sql'],
-                                      "WSO2_METRICS_DB": ['wso2/broker/dbscripts/metrics/oracle.sql']}}},
+                       "product-ei": {"WSO2_CARBON_DB_CORE": ['dbscripts/oracle.sql'],
+                                      "WSO2_CARBON_DB_BROKER": ['wso2/broker/dbscripts/oracle.sql'],
+                                      "WSO2_CARBON_DB_BPS": ['wso2/business-process/dbscripts/oracle.sql'],
+                                      "WSO2_MB_STORE_DB_BROKER": ['wso2/broker/dbscripts/mb-store/oracle-mb.sql'],
+                                      "WSO2_METRICS_DB_BROKER": ['wso2/broker/dbscripts/metrics/oracle.sql'],
+                                      "BPS_DS_BPS": ['wso2/business-process/dbscripts/bps/bpel/create/oracle.sql'],
+                                      "ACTIVITI_DB_BPS": [
+                                          'wso2/business-process/dbscripts/bps/bpmn/create/activiti.oracle.create.identity.sql']}}},
 
     "POSTGRESQL": {"prefix": "jdbc:postgresql://", "driverClassName": "org.postgresql.Driver",
                    "jarName": "postgres.jar",
                    "DB_SETUP": {"product-apim": {},
                                 "product-is": {},
-                                "product-ei": {"WSO2_CARBON_DB": ['dbscripts/postgresql.sql'],
-                                               "BPS_DS": ['wso2/business-process/dbscripts/bps/bpel/create/postgresql.sql'],
-                                               "ACTIVITI_DB": ['wso2/business-process/dbscripts/bps/bpmn/create/activiti.postgres.create.identity.sql']}}
+                                "product-ei": {}}
                    }}
