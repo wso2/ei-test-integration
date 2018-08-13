@@ -23,10 +23,9 @@ from pathlib import Path
 import shutil
 import logging
 from const import ZIP_FILE_EXTENSION, NS, SURFACE_PLUGIN_ARTIFACT_ID, CARBON_NAME, VALUE_TAG, \
-    DEFAULT_ORACLE_SID, DATASOURCE_PATHS, MYSQL_DB_ENGINE, ORACLE_DB_ENGINE, LIB_PATH, PRODUCT_STORAGE_DIR_NAME, \
-    DISTRIBUTION_PATH, MSSQL_DB_ENGINE, M2_PATH
+    DEFAULT_ORACLE_SID, MYSQL_DB_ENGINE, ORACLE_DB_ENGINE, LIB_PATH, PRODUCT_STORAGE_DIR_NAME, \
+    DISTRIBUTION_PATH, MSSQL_DB_ENGINE, M2_PATH, DATASOURCE_PATHS
 
-datasource_paths = None
 database_url = None
 database_user = None
 database_pwd = None
@@ -40,7 +39,6 @@ workspace = None
 sql_driver_location = None
 product_id = None
 database_names = []
-profile_name = None
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -147,61 +145,51 @@ def modify_pom_files():
 def modify_datasources():
     """Modify datasources files which are defined in the const.py. DB ulr, uname, pwd, driver class values are modifying.
     """
-    global profile_name
-    for data_source in datasource_paths:
-        file_path = Path(storage_dist_abs_path / data_source)
-        if sys.platform.startswith('win'):
-            file_path = winapi_path(file_path)
-
-        if product_id == 'product-ei':
-            profiles = data_source.split("/")
-            if profiles[0] == 'wso2':
-                profile_name = profiles[1]
-
-        logger.info("Modifying datasource: " + str(file_path))
-        artifact_tree = ET.parse(file_path)
-        artifarc_root = artifact_tree.getroot()
-        data_sources = artifarc_root.find('datasources')
-        for item in data_sources.findall('datasource'):
-            database_name = None
-            for child in item:
-                if child.tag == 'name':
-                    database_name = child.text
-
-                    if product_id == 'product-ei' and profile_name != None:
-                        database_name = database_name + "_" + profile_name.upper()
-
-                # special checking for namespace object content:media
-                if child.tag == 'definition' and database_name:
-                    configuration = child.find('configuration')
-                    url = configuration.find('url')
-                    user = configuration.find('username')
-                    password = configuration.find('password')
-                    validation_query = configuration.find('validationQuery')
-                    drive_class_name = configuration.find('driverClassName')
-                    if MYSQL_DB_ENGINE == database_config['db_engine'].upper():
-                        url.text = url.text.replace(url.text, database_config[
-                            'url'] + "/" + database_name + "?autoReconnect=true&useSSL=false&requireSSL=false&"
-                                                     "verifyServerCertificate=false")
-                        user.text = user.text.replace(user.text, database_config['user'])
-                    elif ORACLE_DB_ENGINE == database_config['db_engine'].upper():
-                        url.text = url.text.replace(url.text, database_config['url'] + "/" + DEFAULT_ORACLE_SID)
-                        user.text = user.text.replace(user.text, database_name)
-                        validation_query.text = validation_query.text.replace(validation_query.text,
-                                                                              "SELECT 1 FROM DUAL")
-                    elif MSSQL_DB_ENGINE == database_config['db_engine'].upper():
-                        url.text = url.text.replace(url.text,
-                                                    database_config['url'] + ";" + "databaseName=" + database_name)
-                        user.text = user.text.replace(user.text, database_config['user'])
-                    else:
-                        url.text = url.text.replace(url.text, database_config['url'] + "/" + database_name)
-                        user.text = user.text.replace(user.text, database_config['user'])
-                    password.text = password.text.replace(password.text, database_config['password'])
-                    drive_class_name.text = drive_class_name.text.replace(drive_class_name.text,
-                                                                          database_config['driver_class_name'])
-                    database_names.append(database_name)
-        artifact_tree.write(file_path)
-
+    profiles = DATASOURCE_PATHS[product_id]
+    for key, value in profiles.items():
+        for data_source in value:
+            file_path = Path(storage_dist_abs_path / data_source)
+            if sys.platform.startswith('win'):
+                file_path = winapi_path(file_path)
+            logger.info("Modifying datasource: " + str(file_path))
+            artifact_tree = ET.parse(file_path)
+            artifarc_root = artifact_tree.getroot()
+            data_sources = artifarc_root.find('datasources')
+            for item in data_sources.findall('datasource'):
+                database_name = None
+                for child in item:
+                    if child.tag == 'name':
+                        database_name = child.text + "_" + key
+                    # special checking for namespace object content:media
+                    if child.tag == 'definition' and database_name:
+                        configuration = child.find('configuration')
+                        url = configuration.find('url')
+                        user = configuration.find('username')
+                        password = configuration.find('password')
+                        validation_query = configuration.find('validationQuery')
+                        drive_class_name = configuration.find('driverClassName')
+                        if MYSQL_DB_ENGINE == database_config['db_engine'].upper():
+                            url.text = url.text.replace(url.text, database_config[
+                                'url'] + "/" + database_name + "?autoReconnect=true&useSSL=false&requireSSL=false&"
+                                                         "verifyServerCertificate=false")
+                            user.text = user.text.replace(user.text, database_config['user'])
+                        elif ORACLE_DB_ENGINE == database_config['db_engine'].upper():
+                            url.text = url.text.replace(url.text, database_config['url'] + "/" + DEFAULT_ORACLE_SID)
+                            user.text = user.text.replace(user.text, database_name)
+                            validation_query.text = validation_query.text.replace(validation_query.text,
+                                                                                  "SELECT 1 FROM DUAL")
+                        elif MSSQL_DB_ENGINE == database_config['db_engine'].upper():
+                            url.text = url.text.replace(url.text,
+                                                        database_config['url'] + ";" + "databaseName=" + database_name)
+                            user.text = user.text.replace(user.text, database_config['user'])
+                        else:
+                            url.text = url.text.replace(url.text, database_config['url'] + "/" + database_name)
+                            user.text = user.text.replace(user.text, database_config['user'])
+                        password.text = password.text.replace(password.text, database_config['password'])
+                        drive_class_name.text = drive_class_name.text.replace(drive_class_name.text,
+                                                                              database_config['driver_class_name'])
+                        database_names.append(database_name)
+            artifact_tree.write(file_path)
 
 def add_distribution_to_m2(storage, name, product_version):
     """Add the distribution zip into local .m2.
@@ -226,7 +214,6 @@ def configure_product(name, id, db_config, ws, product_version):
         global product_id
         global database_config
         global workspace
-        global datasource_paths
         global target_dir_abs_path
         global storage_dist_abs_path
         global storage_dir_abs_path
@@ -235,7 +222,6 @@ def configure_product(name, id, db_config, ws, product_version):
         product_id = id
         database_config = db_config
         workspace = ws
-        datasource_paths = DATASOURCE_PATHS[product_id]
         zip_name = dist_name + ZIP_FILE_EXTENSION
 
         storage_dir_abs_path = Path(workspace + "/" + PRODUCT_STORAGE_DIR_NAME)
@@ -246,10 +232,7 @@ def configure_product(name, id, db_config, ws, product_version):
 
         extract_product(storage_zip_abs_path)
         copy_jar_file(Path(database_config['sql_driver_location']), Path(storage_dist_abs_path / LIB_PATH[product_id]))
-        if datasource_paths is not None:
-            modify_datasources()
-        else:
-            logger.info("datasource paths are not defined in the config file")
+        modify_datasources()
         os.remove(str(storage_zip_abs_path))
         compress_distribution(configured_dist_storing_loc, storage_dir_abs_path)
         add_distribution_to_m2(storage_dir_abs_path, dist_name, product_version)
