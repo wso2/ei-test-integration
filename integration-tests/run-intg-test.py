@@ -25,13 +25,17 @@ import pymysql
 import sqlparse
 import stat
 import re
+import fnmatch
 from pathlib import Path
 import urllib.request as urllib2
 from xml.dom import minidom
 import configure_product as cp
+import errno
 from subprocess import Popen, PIPE
 from const import TEST_PLAN_PROPERTY_FILE_NAME, INFRA_PROPERTY_FILE_NAME, LOG_FILE_NAME, DB_META_DATA, \
-    PRODUCT_STORAGE_DIR_NAME, DEFAULT_DB_USERNAME, LOG_STORAGE, LOG_FILE_PATHS, DIST_POM_PATH, NS, ZIP_FILE_EXTENSION
+    PRODUCT_STORAGE_DIR_NAME, DEFAULT_DB_USERNAME, LOG_STORAGE, ARTIFACT_REPORTS_PATHS, DIST_POM_PATH, NS, \
+    ZIP_FILE_EXTENSION, INTEGRATION_PATH, IGNORE_DIR_TYPES, TEST_OUTPUT_DIR_NAME
+
 
 git_repo_url = None
 git_branch = None
@@ -55,7 +59,6 @@ tag_name = None
 test_mode = None
 product_version = None
 database_config = {}
-
 
 def read_proprty_files():
     global db_engine
@@ -297,15 +300,32 @@ def run_mysql_script_file(db_name, script_path):
     conn.close()
 
 
+def ignore_dirs(directories):
+    """
+        Define the ignore pattern for copytree.
+    """
+    def _ignore_patterns(path, names):
+        ignored_names = []
+        for directory in directories:
+            ignored_names.extend(fnmatch.filter(names, directory))
+        return set(ignored_names)
+    return _ignore_patterns
+
+
 def copy_file(source, target):
     """Copy the source file to the target.
     """
-    if sys.platform.startswith('win'):
-        source = cp.winapi_path(source)
-        target = cp.winapi_path(target)
-        shutil.copy(source, target)
-    else:
-        shutil.copy(source, target)
+    try:
+        if sys.platform.startswith('win'):
+            source = cp.winapi_path(source)
+            target = cp.winapi_path(target)
+
+        if os.path.isdir(source):
+            shutil.copytree(source, target, ignore=ignore_dirs((IGNORE_DIR_TYPES[product_id])))
+        else:
+            shutil.copy(source, target)
+    except OSError as e:
+            print('Directory not copied. Error: %s' % e)
 
 
 def get_dist_name():
@@ -405,11 +425,11 @@ def build_module(module_path):
     """
     logger.info('Start building a module. Module: ' + str(module_path))
     if sys.platform.startswith('win'):
-        subprocess.call(['mvn', 'clean', 'install', '-B',
+        subprocess.call(['mvn', 'clean', 'install', '-fae', '-B',
                          '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'],
                         shell=True, cwd=module_path)
     else:
-        subprocess.call(['mvn', 'clean', 'install', '-B',
+        subprocess.call(['mvn', 'clean', 'install', '-fae', '-B',
                          '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'],
                         cwd=module_path)
     logger.info('Module build is completed. Module: ' + str(module_path))
@@ -419,11 +439,26 @@ def save_log_files():
     log_storage = Path(workspace + "/" + LOG_STORAGE)
     if not Path.exists(log_storage):
         Path(log_storage).mkdir(parents=True, exist_ok=True)
-    log_file_paths = LOG_FILE_PATHS[product_id]
+    log_file_paths = ARTIFACT_REPORTS_PATHS[product_id]
     if log_file_paths:
         for file in log_file_paths:
             absolute_file_path = Path(workspace + "/" + product_id + "/" + file)
             if Path.exists(absolute_file_path):
+                copy_file(absolute_file_path, log_storage)
+            else:
+                logger.error("File doesn't contain in the given location: " + str(absolute_file_path))
+
+
+def save_test_output():
+    log_folder = Path(workspace + "/" + TEST_OUTPUT_DIR_NAME)
+    if Path.exists(log_folder):
+        shutil.rmtree(log_folder)
+    log_file_paths = ARTIFACT_REPORTS_PATHS[product_id]
+    for key, value in log_file_paths.items():
+        for file in value:
+            absolute_file_path = Path(workspace + "/" + product_id + "/" + file)
+            if Path.exists(absolute_file_path):
+                log_storage = Path(workspace + "/" + TEST_OUTPUT_DIR_NAME + "/" + key)
                 copy_file(absolute_file_path, log_storage)
             else:
                 logger.error("File doesn't contain in the given location: " + str(absolute_file_path))
@@ -603,9 +638,9 @@ def main():
         if product_id == "product-apim":
             module_path = Path(workspace + "/" + product_id + "/" + 'modules/api-import-export')
             build_module(module_path)
-        intg_module_path = Path(workspace + "/" + product_id + "/" + 'integration')
+        intg_module_path = Path(workspace + "/" + product_id + "/" + INTEGRATION_PATH[product_id])
         build_module(intg_module_path)
-        save_log_files()
+        save_test_output()
         create_output_property_fle()
     except Exception as e:
         logger.error("Error occurred while running the run-intg.py script", exc_info=True)

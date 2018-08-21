@@ -26,6 +26,7 @@ from const import ZIP_FILE_EXTENSION, NS, SURFACE_PLUGIN_ARTIFACT_ID, CARBON_NAM
     DEFAULT_ORACLE_SID, MYSQL_DB_ENGINE, ORACLE_DB_ENGINE, LIB_PATH, PRODUCT_STORAGE_DIR_NAME, \
     DISTRIBUTION_PATH, MSSQL_DB_ENGINE, M2_PATH, DATASOURCE_PATHS
 
+
 database_url = None
 database_user = None
 database_pwd = None
@@ -232,7 +233,7 @@ def configure_product(name, id, db_config, ws, product_version):
         configured_dist_storing_loc = Path(target_dir_abs_path / dist_name)
 
         extract_product(storage_zip_abs_path)
-        copy_jar_file(Path(database_config['sql_driver_location']), Path(storage_dist_abs_path / LIB_PATH))
+        copy_jar_file(Path(database_config['sql_driver_location']), Path(storage_dist_abs_path / LIB_PATH[product_id]))
         modify_datasources()
         os.remove(str(storage_zip_abs_path))
         compress_distribution(configured_dist_storing_loc, storage_dir_abs_path)

@@ -26,14 +26,21 @@ DATASOURCE_PATHS = {"product-apim": {},
                                            "wso2/business-process/conf/datasources/bps-datasources.xml",
                                            "wso2/business-process/conf/datasources/activiti-datasources.xml"]},
                     }
-M2_PATH = {"product-is": "is/wso2is", "product-apim": "am/wso2am",
+M2_PATH = {"product-is": "is/wso2is",
+           "product-apim": "am/wso2am",
            "product-ei": "ei/wso2ei"}
-DIST_POM_PATH = {"product-is": "modules/distribution/pom.xml", "product-apim": "modules/distribution/product/pom.xml",
+DIST_POM_PATH = {"product-is": "modules/distribution/pom.xml",
+                 "product-apim": "modules/distribution/product/pom.xml",
                  "product-ei": "distribution/pom.xml"}
-LIB_PATH = "lib"
+LIB_PATH = {"product-apim": "",
+            "product-is": "",
+            "product-ei": "lib"}
 DISTRIBUTION_PATH = {"product-apim": "modules/distribution/product/target",
                      "product-is": "modules/distribution/target",
                      "product-ei": "distribution/target"}
+INTEGRATION_PATH = {"product-apim": "modules/integration",
+                    "product-is": "modules/integration",
+                    "product-ei": "integration"}
 PRODUCT_STORAGE_DIR_NAME = "storage"
 TEST_PLAN_PROPERTY_FILE_NAME = "testplan-props.properties"
 INFRA_PROPERTY_FILE_NAME = "infrastructure.properties"
@@ -44,9 +51,38 @@ MYSQL_DB_ENGINE = "MYSQL"
 DEFAULT_ORACLE_SID = "orcl"
 DEFAULT_DB_USERNAME = "wso2carbon"
 LOG_STORAGE = "logs"
-LOG_FILE_PATHS = {"product-apim": [],
+TEST_OUTPUT_DIR_NAME = "test_outputs"
+ARTIFACT_REPORTS_PATHS = {"product-apim": [],
                   "product-is": [],
-                  "product-ei": []}
+                  "product-ei": {"mediation-tests-service": ["integration/mediation-tests/tests-service/target/surefire-reports",
+                                                             "integration/mediation-tests/tests-service/target/logs/automation.log"],
+                                 "mediation-tests-transport": ["integration/mediation-tests/tests-transport/target/surefire-reports",
+                                                                "integration/mediation-tests/tests-transport/target/logs/automation.log"],
+                                 "mediation-tests-mediator-1": ["integration/mediation-tests/tests-mediator-1/target/surefire-reports",
+                                                                "integration/mediation-tests/tests-mediator-1/target/logs/automation.log"],
+                                 "mediation-tests-mediator-2": ["integration/mediation-tests/tests-mediator-2/target/surefire-reports",
+                                                                "integration/mediation-tests/tests-mediator-2/target/logs/automation.log"],
+                                 "mediation-tests-patches": ["integration/mediation-tests/tests-patches/target/surefire-reports",
+                                                             "integration/mediation-tests/tests-patches/target/logs/automation.log"],
+                                 "mediation-tests-other": ["integration/mediation-tests/tests-other/target/surefire-reports",
+                                                           "integration/mediation-tests/tests-other/target/logs/automation.log"],
+                                 "business-process-bpel": ["integration/business-process-tests/tests-integration/bpel/target/surefire-reports",
+                                                           "integration/business-process-tests/tests-integration/bpel/target/logs/automation.log"],
+                                 "business-process-bpmn": ["integration/business-process-tests/tests-integration/bpmn/target/surefire-reports",
+                                                           "integration/business-process-tests/tests-integration/bpmn/target/logs/automation.log"],
+                                 "business-process-humantasks": ["integration/business-process-tests/tests-integration/humantasks/target/surefire-reports",
+                                                                 "integration/business-process-tests/tests-integration/humantasks/target/logs/automation.log"],
+                                 "business-process-taskcoordination": ["integration/business-process-tests/tests-integration/taskcoordination/target/surefire-reports",
+                                                                       "integration/business-process-tests/tests-integration/taskcoordination/target/logs/automation.log"],
+                                 "dataservice-hosting-integration-tests": ["integration/dataservice-hosting-tests/tests-integration/tests/target/surefire-reports",
+                                                                           "integration/dataservice-hosting-tests/tests-integration/tests/target/logs/automation.log"],
+                                 "business-process-patches-bpel": ["integration/business-process-tests/tests-patches/bpel/target/surefire-reports"]
+                               }
+                  }
+IGNORE_DIR_TYPES = {"product-apim": [],
+                     "product-is": [],
+                     "product-ei": ["ESBTestSuite","junitreports","BPS Test Suite","bps-server-startup","BPS HumanTask TestSuite","BPS HumanTask Coordination TestSuite","DssTestSuite"]
+                    }
 DB_META_DATA = {
     "MYSQL": {"prefix": "jdbc:mysql://", "driverClassName": "com.mysql.jdbc.Driver", "jarName": "mysql.jar",
               "DB_SETUP": {
@@ -59,7 +95,7 @@ DB_META_DATA = {
                                  "WSO2_METRICS_DB_BROKER": ['wso2/broker/dbscripts/metrics/mysql.sql'],
                                  "BPS_DS_BPS": ['wso2/business-process/dbscripts/bps/bpel/create/mysql.sql'],
                                  "ACTIVITI_DB_BPS": [
-                                     'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mysql.create.identity.sql'],
+                                     'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mysql.create.identity.sql']
                                  }}},
 
     "SQLSERVER-SE": {"prefix": "jdbc:sqlserver://",
