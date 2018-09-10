@@ -518,8 +518,10 @@ def get_relative_path_of_dist_storage(xml_path):
     for artifact in artifact_elements:
         file_name_elements = artifact.getElementsByTagName("fileName")
         for file_name in file_name_elements:
+            logger.info("node vale= " + file_name.firstChild.nodeValue + "\n dist_zip= " + dist_zip_name)
             if file_name.firstChild.nodeValue == dist_zip_name:
                 parent_node = file_name.parentNode
+                logger.info("return Value" + parent_node.getElementsByTagName("relativePath")[0].firstChild.nodeValue)
                 return parent_node.getElementsByTagName("relativePath")[0].firstChild.nodeValue
     return None
 
