@@ -24,7 +24,7 @@ import shutil
 import logging
 from const import ZIP_FILE_EXTENSION, NS, SURFACE_PLUGIN_ARTIFACT_ID, CARBON_NAME, VALUE_TAG, \
     DEFAULT_ORACLE_SID, MYSQL_DB_ENGINE, ORACLE_DB_ENGINE, LIB_PATH, PRODUCT_STORAGE_DIR_NAME, \
-    DISTRIBUTION_PATH, MSSQL_DB_ENGINE, M2_PATH, DATASOURCE_PATHS, WSO2SERVER
+    DISTRIBUTION_PATH, MSSQL_DB_ENGINE, M2_PATH, DATASOURCE_PATHS, INTEGRATOR, BP, BROKER, ANALYTICS, MICRO_INTG
 
 
 database_url = None
@@ -245,11 +245,12 @@ def configure_product(name, id, db_config, ws, product_version):
         storage_zip_abs_path = Path(storage_dir_abs_path / zip_name)
         storage_dist_abs_path = Path(storage_dir_abs_path / dist_name)
         configured_dist_storing_loc = Path(target_dir_abs_path / dist_name)
-        script_name = Path(WSO2SERVER)
-        script_path = Path(storage_dist_abs_path / script_name)
+        script_name = [INTEGRATOR,BP, BROKER, ANALYTICS, MICRO_INTG]
 
         extract_product(storage_zip_abs_path)
-        attach_jolokia_agent(script_path)
+        for scripts in script_name:
+            script_path = Path(storage_dist_abs_path / Path(scripts))
+            attach_jolokia_agent(script_path)
 
         copy_jar_file(Path(database_config['sql_driver_location']), Path(storage_dist_abs_path / LIB_PATH[product_id]))
         modify_datasources()
