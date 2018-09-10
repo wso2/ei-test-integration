@@ -14,7 +14,11 @@
 
 NS = {'d': 'http://maven.apache.org/POM/4.0.0'}
 ZIP_FILE_EXTENSION = ".zip"
-WSO2SERVER='bin/integrator.sh'
+INTEGRATOR = "bin/integrator.sh"
+ANALYTICS = "wso2/analytics/bin/wso2server.sh"
+BROKER = "wso2/broker/bin/wso2server.sh"
+BP = "wso2/business-process/bin/wso2server.sh"
+MICRO_INTG = "wso2/micro-integrator/bin/wso2server.sh"
 CARBON_NAME = "carbon.zip"
 VALUE_TAG = "{http://maven.apache.org/POM/4.0.0}value"
 SURFACE_PLUGIN_ARTIFACT_ID = "maven-surefire-plugin"
