@@ -13,7 +13,7 @@
 # limitations under the License.
 
 NS = {'d': 'http://maven.apache.org/POM/4.0.0'}
-ZIP_FILE_EXTENSION = ".zip"
+ZIP_FILE_EXTENSION = "-m7.zip"
 INTEGRATOR = "bin/integrator.sh"
 ANALYTICS = "wso2/analytics/bin/wso2server.sh"
 BROKER = "wso2/broker/bin/wso2server.sh"
