@@ -343,7 +343,7 @@ def get_dist_name():
     parent = artifact_root.find('d:parent', NS)
     artifact_id = artifact_root.find('d:artifactId', NS).text
     product_version = parent.find('d:version', NS).text
-    dist_name = artifact_id + "-" + product_version
+    dist_name = artifact_id + "-6.4.0"
     dist_zip_name = dist_name + ZIP_FILE_EXTENSION
     return dist_name
 
