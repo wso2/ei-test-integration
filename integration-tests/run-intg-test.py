@@ -34,7 +34,8 @@ import errno
 from subprocess import Popen, PIPE
 from const import TEST_PLAN_PROPERTY_FILE_NAME, INFRA_PROPERTY_FILE_NAME, LOG_FILE_NAME, DB_META_DATA, \
     PRODUCT_STORAGE_DIR_NAME, DEFAULT_DB_USERNAME, LOG_STORAGE, ARTIFACT_REPORTS_PATHS, DIST_POM_PATH, NS, \
-    ZIP_FILE_EXTENSION, INTEGRATION_PATH, IGNORE_DIR_TYPES, TEST_OUTPUT_DIR_NAME
+    ZIP_FILE_EXTENSION, INTEGRATION_PATH, IGNORE_DIR_TYPES, TEST_OUTPUT_DIR_NAME, MEDIATION_TEST_MODULES
+import fileinput
 
 
 git_repo_url = None
@@ -586,6 +587,20 @@ def replace_file(source, destination):
         destination = cp.winapi_path(destination)
     shutil.move(source, destination)
 
+def disable_jacoco_coverage():
+    """Disable jacoco coverage fro Windows by setting the coverage to false
+       in automation.xl in test modules
+    """
+
+    logger.info("Disabling Jacoco coverage in mediation tests...")
+    for path in MEDIATION_TEST_MODULES:
+        absolute_file_path = Path(workspace + "/" + product_id + "/integration/mediation-tests/" + path + "/src/test/resources/automation.xml")
+        if Path.exists(absolute_file_path):
+            with fileinput.FileInput(str(absolute_file_path), inplace=True) as file:
+                for line in file:
+                    print(line.replace("<coverage>true</coverage>", "<coverage>false</coverage>"), end='')
+        else:
+            logger.error("File doesn't contain in the given location: " + str(absolute_file_path))
 
 def main():
     try:
@@ -638,6 +653,10 @@ def main():
         if product_id == "product-apim":
             module_path = Path(workspace + "/" + product_id + "/" + 'modules/api-import-export')
             build_module(module_path)
+
+        # Disable jacoco coverage for EI in Windows
+        if product_id == "product-ei" and sys.platform.startswith('win'):
+            disable_jacoco_coverage()
         intg_module_path = Path(workspace + "/" + product_id + "/" + INTEGRATION_PATH[product_id])
         build_module(intg_module_path)
         save_test_output()
