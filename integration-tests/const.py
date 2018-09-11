@@ -132,4 +132,4 @@ DB_META_DATA = {
                                 "product-is": {},
                                 "product-ei": {}}
                    }}
-MEDIATION_TEST_MODULES={"tests-mediator-1", "tests-mediator-2", "tests-service", "tests-transport", "tests-patches", "tests-sample", "tests-other"}
+MEDIATION_TEST_MODULES = {"tests-mediator-1", "tests-mediator-2", "tests-service", "tests-transport", "tests-patches", "tests-sample", "tests-other"}
