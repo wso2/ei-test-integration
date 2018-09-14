@@ -34,7 +34,7 @@ import errno
 from subprocess import Popen, PIPE
 from const import TEST_PLAN_PROPERTY_FILE_NAME, INFRA_PROPERTY_FILE_NAME, LOG_FILE_NAME, DB_META_DATA, \
     PRODUCT_STORAGE_DIR_NAME, DEFAULT_DB_USERNAME, LOG_STORAGE, ARTIFACT_REPORTS_PATHS, DIST_POM_PATH, NS, \
-    ZIP_FILE_EXTENSION, INTEGRATION_PATH, IGNORE_DIR_TYPES, TEST_OUTPUT_DIR_NAME
+    ZIP_FILE_EXTENSION, INTEGRATION_PATH, IGNORE_DIR_TYPES, TEST_OUTPUT_DIR_NAME, TESTNG_DIST_XML_PATHS
 
 
 git_repo_url = None
@@ -580,7 +580,7 @@ def create_output_property_fle():
 def replace_file(source, destination):
     """Replace source file to the destination
     """
-    logger.info('replacing files from:' + str(source) + "to: " + str(destination))
+    logger.info('Replacing files from:' + str(source) + " to: " + str(destination))
     if sys.platform.startswith('win'):
         source = cp.winapi_path(source)
         destination = cp.winapi_path(destination)
@@ -609,16 +609,11 @@ def main():
             checkout_to_tag(get_latest_tag_name(product_id))
             dist_name = get_dist_name()
             get_latest_released_dist()
-            testng_source = Path(workspace + "/" + "testng.xml")
-            testng_destination = Path(workspace + "/" + product_id + "/" +
-                                      'modules/integration/tests-integration/tests-backend/src/test/resources/testng.xml')
-            testng_server_mgt_source = Path(workspace + "/" + "testng-server-mgt.xml")
-            testng_server_mgt_destination = Path(workspace + "/" + product_id + "/" +
-                                                 'modules/integration/tests-integration/tests-backend/src/test/resources/testng-server-mgt.xml')
-            # replace testng source
-            replace_file(testng_source, testng_destination)
-            # replace testng server mgt source
-            replace_file(testng_server_mgt_source, testng_server_mgt_destination)
+            if product_id == "product-ei" and sys.platform.startswith('win'):
+                for testng_file in TESTNG_DIST_XML_PATHS:
+                    testng_source = Path(workspace + "/" + testng_file)
+                    testng_destination = Path(workspace + "/" + product_id + "/" + testng_file)
+                    replace_file(testng_source, testng_destination)
         elif test_mode == "RELEASE":
             checkout_to_tag(get_latest_tag_name(product_id))
             dist_name = get_dist_name()

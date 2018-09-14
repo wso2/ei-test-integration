@@ -52,6 +52,10 @@ DEFAULT_ORACLE_SID = "orcl"
 DEFAULT_DB_USERNAME = "wso2carbon"
 LOG_STORAGE = "logs"
 TEST_OUTPUT_DIR_NAME = "surefire-reports"
+
+# Add testng files to be replaced. E.g "integration/mediation-tests/tests-mediator-1/src/test/resources/testng.xml"
+TESTNG_DIST_XML_PATHS = {}
+
 ARTIFACT_REPORTS_PATHS = {"product-apim": [],
                   "product-is": [],
                   "product-ei": {"mediation-tests-service": ["integration/mediation-tests/tests-service/target/surefire-reports",
