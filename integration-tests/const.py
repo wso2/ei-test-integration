@@ -51,7 +51,7 @@ MYSQL_DB_ENGINE = "MYSQL"
 DEFAULT_ORACLE_SID = "orcl"
 DEFAULT_DB_USERNAME = "wso2carbon"
 LOG_STORAGE = "logs"
-TEST_OUTPUT_DIR_NAME = "test_outputs"
+TEST_OUTPUT_DIR_NAME = "surefire-reports"
 ARTIFACT_REPORTS_PATHS = {"product-apim": [],
                   "product-is": [],
                   "product-ei": {"mediation-tests-service": ["integration/mediation-tests/tests-service/target/surefire-reports",
