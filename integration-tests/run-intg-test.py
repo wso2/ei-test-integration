@@ -609,7 +609,7 @@ def main():
             checkout_to_tag(get_latest_tag_name(product_id))
             dist_name = get_dist_name()
             get_latest_released_dist()
-            if product_id == "product-ei" and sys.platform.startswith('win'):
+            if product_id == "product-ei":
                 for testng_file in TESTNG_DIST_XML_PATHS:
                     testng_source = Path(workspace + "/" + testng_file)
                     testng_destination = Path(workspace + "/" + product_id + "/" + testng_file)
