@@ -54,7 +54,18 @@ LOG_STORAGE = "logs"
 TEST_OUTPUT_DIR_NAME = "surefire-reports"
 
 # Add testng files to be replaced. E.g "integration/mediation-tests/tests-mediator-1/src/test/resources/testng.xml"
-TESTNG_DIST_XML_PATHS = {}
+TESTNG_DIST_XML_PATHS = {"integration/business-process-tests/pom.xml",
+                         "integration/business-process-tests/tests-integration/bpel/src/test/resources/testng-server-mgt.xml",
+                         "integration/business-process-tests/tests-integration/bpel/src/test/resources/testng.xml",
+                         "integration/business-process-tests/tests-integration/bpmn/src/test/resources/testng.xml",
+                         "integration/business-process-tests/tests-integration/humantasks/src/test/resources/testng.xml",
+                         "integration/business-process-tests/tests-integration/pom.xml",
+                         "integration/mediation-tests/pom.xml",
+                         "integration/mediation-tests/tests-mediator-2/src/test/resources/testng.xml",
+                         "integration/mediation-tests/tests-patches/src/test/resources/testng.xml",
+                         "integration/mediation-tests/tests-service/src/test/resources/testng.xml",
+                         "integration/mediation-tests/tests-transport/src/test/resources/testng.xml",
+                         "integration/pom.xml"}
 
 ARTIFACT_REPORTS_PATHS = {"product-apim": [],
                   "product-is": [],
