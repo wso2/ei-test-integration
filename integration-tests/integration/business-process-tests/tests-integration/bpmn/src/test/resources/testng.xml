@@ -45,7 +45,7 @@
     <test name="BPMN User substitution related Test Cases" preserve-order="true" verbose="2" parallel="false">
         <classes>
             <class name="org.wso2.ei.businessprocess.integration.tests.bpmn.BPMNUserSubstitutionTestCase"/>
-            <class name="org.wso2.ei.businessprocess.integration.tests.bpmn.rest.BPMNRestVariableTestCase"n/>
+            <class name="org.wso2.ei.businessprocess.integration.tests.bpmn.rest.BPMNRestVariableTestCase"/>
             <class name="org.wso2.ei.businessprocess.integration.tests.bpmn.rest.BPMNRestDeploymentsTestCase"/>
         </classes>
     </test>
