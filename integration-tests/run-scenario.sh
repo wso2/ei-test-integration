@@ -145,7 +145,7 @@ if [ "${os}" = "Windows" ]; then
   sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${FILE5} ${user}@${host}:${REM_DIR}
   sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${FILE6} ${user}@${host}:${REM_DIR}
   sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${FILE8} ${user}@${host}:${REM_DIR}
-  sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no -r ${DIR1} ${user}@${host}:${REM_DIR}
+  sshpass -p "${password}" [ -d ${DIR1} ] && scp -q -o StrictHostKeyChecking=no -r ${DIR1} ${user}@${host}:${REM_DIR}
 
   echo "=== Files copied successfully ==="
   echo "Execution begins.. "
@@ -167,7 +167,7 @@ else
   scp -o StrictHostKeyChecking=no -i ${key_pem} ${FILE5} ${user}@${host}:${REM_DIR}
   scp -o StrictHostKeyChecking=no -i ${key_pem} ${FILE6} ${user}@${host}:${REM_DIR}
   scp -o StrictHostKeyChecking=no -i ${key_pem} ${FILE7} ${user}@${host}:${REM_DIR}
-  scp -o StrictHostKeyChecking=no -i ${key_pem} -r ${DIR1} ${user}@${host}:${REM_DIR}
+  [ -d ${DIR1} ] && scp -o StrictHostKeyChecking=no -i ${key_pem} -r ${DIR1} ${user}@${host}:${REM_DIR}
 
   echo "=== Files copied successfully ==="
 
