@@ -145,7 +145,7 @@ if [ "${os}" = "Windows" ]; then
   sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${FILE5} ${user}@${host}:${REM_DIR}
   sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${FILE6} ${user}@${host}:${REM_DIR}
   sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${FILE8} ${user}@${host}:${REM_DIR}
-  sshpass -p "${password}" [ -d ${DIR1} ] && scp -q -o StrictHostKeyChecking=no -r ${DIR1} ${user}@${host}:${REM_DIR}
+  [ -d ${DIR1} ] && sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no -r ${DIR1} ${user}@${host}:${REM_DIR}
 
   echo "=== Files copied successfully ==="
   echo "Execution begins.. "
@@ -153,7 +153,7 @@ if [ "${os}" = "Windows" ]; then
   sshpass -p "${password}" ssh -o StrictHostKeyChecking=no ${user}@${host} "${REM_DIR}/${FILE8}" ${REM_DIR}
   echo "=== End of execution ==="
   echo "Retrieving reports from instance.. "
-  sshpass -p "${password}" scp -r -q -o StrictHostKeyChecking=no ${user}@${host}:${REM_DIR}/test_outputs ${DIR}
+  sshpass -p "${password}" scp -r -q -o StrictHostKeyChecking=no ${user}@${host}:${REM_DIR}/surefire-reports ${DIR}
   sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${user}@${host}:${REM_DIR}/output.properties ${DIR}
   echo "=== Reports retrieved successfully ==="
   set -o xtrace
@@ -175,7 +175,7 @@ else
 
   echo "=== End of execution ==="
   #Get the reports from integration test
-  scp -o StrictHostKeyChecking=no -r -i ${key_pem} ${user}@${host}:${REM_DIR}/test_outputs ${DIR}
+  scp -o StrictHostKeyChecking=no -r -i ${key_pem} ${user}@${host}:${REM_DIR}/surefire-reports ${DIR}
   scp -o StrictHostKeyChecking=no -r -i ${key_pem} ${user}@${host}:${REM_DIR}/output.properties ${DIR}
   echo "=== Reports are copied success ==="
 fi
