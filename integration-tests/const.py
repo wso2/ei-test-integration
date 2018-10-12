@@ -115,7 +115,11 @@ DB_META_DATA = {
                                  "WSO2_METRICS_DB_BROKER": ['wso2/broker/dbscripts/metrics/mysql.sql'],
                                  "BPS_DS_BPS": ['wso2/business-process/dbscripts/bps/bpel/create/mysql.sql'],
                                  "ACTIVITI_DB_BPS": [
-                                     'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mysql.create.identity.sql']
+                                     'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mysql.create.engine.sql',
+                                     'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mysql.create.history.sql',
+                                     'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mysql.create.identity.sql',
+                                     'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mysql.create.substitute.sql'
+                                 ]
                                  }}},
 
     "SQLSERVER-SE": {"prefix": "jdbc:sqlserver://",
@@ -130,7 +134,11 @@ DB_META_DATA = {
                                         "WSO2_METRICS_DB_BROKER": ['wso2/broker/dbscripts/metrics/mssql.sql'],
                                         "BPS_DS_BPS": ['wso2/business-process/dbscripts/bps/bpel/create/mssql.sql'],
                                         "ACTIVITI_DB_BPS": [
-                                            'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mssql.create.identity.sql']}}},
+                                            'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mssql.create.engine.sql',
+                                            'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mssql.create.history.sql',
+                                            'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mssql.create.identity.sql',
+                                            'wso2/business-process/dbscripts/bps/bpmn/create/activiti.mssql.create.substitute.sql'
+                                            ]}}},
 
     "ORACLE-SE2": {"prefix": "jdbc:oracle:thin:@", "driverClassName": "oracle.jdbc.OracleDriver",
                    "jarName": "oracle-se.jar",
@@ -144,7 +152,11 @@ DB_META_DATA = {
                                       "WSO2_METRICS_DB_BROKER": ['wso2/broker/dbscripts/metrics/oracle.sql'],
                                       "BPS_DS_BPS": ['wso2/business-process/dbscripts/bps/bpel/create/oracle.sql'],
                                       "ACTIVITI_DB_BPS": [
-                                          'wso2/business-process/dbscripts/bps/bpmn/create/activiti.oracle.create.identity.sql']}}},
+                                          'wso2/business-process/dbscripts/bps/bpmn/create/activiti.oracle.create.engine.sql',
+                                          'wso2/business-process/dbscripts/bps/bpmn/create/activiti.oracle.create.history.sql',
+                                          'wso2/business-process/dbscripts/bps/bpmn/create/activiti.oracle.create.identity.sql',
+                                          'wso2/business-process/dbscripts/bps/bpmn/create/activiti.oracle.create.substitute.sql'
+                                      ]}}},
 
     "POSTGRESQL": {"prefix": "jdbc:postgresql://", "driverClassName": "org.postgresql.Driver",
                    "jarName": "postgres.jar",
