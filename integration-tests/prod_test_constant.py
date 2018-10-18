@@ -29,7 +29,7 @@ M2_PATH = "ei/wso2ei"
 DIST_POM_PATH = "distribution/pom.xml"
 LIB_PATH = "lib"
 DISTRIBUTION_PATH = "distribution/target"
-INTEGRATION_PATH = "integration/mediation-tests/tests-mediator-1"
+INTEGRATION_PATH = "integration"
 POM_FILE_PATHS = {}
 
 # Add testng files to be replaced. E.g "integration/mediation-tests/tests-mediator-1/src/test/resources/testng.xml"
