@@ -29,31 +29,30 @@ import fnmatch
 from pathlib import Path
 import urllib.request as urllib2
 from xml.dom import minidom
+
 import intg_test_manager as cm
 import errno
 from subprocess import Popen, PIPE
 
 
 from prod_test_constant import DB_META_DATA, ARTIFACT_REPORTS_PATHS, DIST_POM_PATH, LIB_PATH, M2_PATH, \
-    INTEGRATION_PATH, IGNORE_DIR_TYPES, TESTNG_DIST_XML_PATHS, DISTRIBUTION_PATH, DATASOURCE_PATHS, POM_FILE_PATHS, \
-    INTEGRATOR, BP, BROKER, ANALYTICS, MICRO_INTG
+    INTEGRATION_PATH, IGNORE_DIR_TYPES, TESTNG_DIST_XML_PATHS, DISTRIBUTION_PATH, DATASOURCE_PATHS, \
+    POM_FILE_PATHS, INTEGRATOR, BP, BROKER, ANALYTICS, MICRO_INTG
 
-from intg_test_constant import NS, ZIP_FILE_EXTENSION, CARBON_NAME, VALUE_TAG, SURFACE_PLUGIN_ARTIFACT_ID, TEST_PLAN_PROPERTY_FILE_NAME, \
-    INFRA_PROPERTY_FILE_NAME, LOG_FILE_NAME, PRODUCT_STORAGE_DIR_NAME, DEFAULT_DB_USERNAME, LOG_STORAGE, TEST_OUTPUT_DIR_NAME, \
-    DEFAULT_ORACLE_SID, MYSQL_DB_ENGINE, ORACLE_DB_ENGINE, PRODUCT_STORAGE_DIR_NAME, MSSQL_DB_ENGINE
-
-
+from intg_test_constant import NS, ZIP_FILE_EXTENSION, CARBON_NAME, VALUE_TAG, SURFACE_PLUGIN_ARTIFACT_ID, \
+    TEST_PLAN_PROPERTY_FILE_NAME, INFRA_PROPERTY_FILE_NAME, LOG_FILE_NAME, PRODUCT_STORAGE_DIR_NAME, \
+    DEFAULT_DB_USERNAME, LOG_STORAGE, TEST_OUTPUT_DIR_NAME, DEFAULT_ORACLE_SID, MYSQL_DB_ENGINE, \
+    ORACLE_DB_ENGINE, PRODUCT_STORAGE_DIR_NAME, MSSQL_DB_ENGINE
 
 database_names = []
 db_engine = None
 sql_driver_location = None
 
 
-
 def modify_datasources():
     """Modify datasources files which are defined in the const.py. DB ulr, uname, pwd, driver class values are modifying.
     """
-    profiles = DATASOURCE_PATHS[cm.product_id]
+    profiles = DATASOURCE_PATHS
     for key, value in profiles.items():
         for data_source in value:
             file_path = Path(storage_dist_abs_path / data_source)
@@ -109,7 +108,7 @@ def configure_product():
         zip_name = dist_name + ZIP_FILE_EXTENSION
 
         storage_dir_abs_path = Path(cm.workspace + "/" + PRODUCT_STORAGE_DIR_NAME)
-        target_dir_abs_path = Path(cm.workspace + "/" + cm.product_id + "/" + DISTRIBUTION_PATH[cm.product_id])
+        target_dir_abs_path = Path(cm.workspace + "/" + cm.product_id + "/" + DISTRIBUTION_PATH)
         storage_zip_abs_path = Path(storage_dir_abs_path / zip_name)
         storage_dist_abs_path = Path(storage_dir_abs_path / dist_name)
         configured_dist_storing_loc = Path(target_dir_abs_path / dist_name)
@@ -120,11 +119,11 @@ def configure_product():
             script_path = Path(storage_dist_abs_path / Path(scripts))
             cm.attach_jolokia_agent(script_path)
 
-        cm.copy_jar_file(Path(cm.database_config['sql_driver_location']), Path(storage_dist_abs_path / LIB_PATH[cm.product_id]))
+        cm.copy_jar_file(Path(cm.database_config['sql_driver_location']), Path(storage_dist_abs_path / LIB_PATH))
         modify_datasources()
         os.remove(str(storage_zip_abs_path))
         cm.compress_distribution(configured_dist_storing_loc, storage_dir_abs_path)
-        cm.add_distribution_to_m2(storage_dir_abs_path, M2_PATH[cm.product_id])
+        cm.add_distribution_to_m2(storage_dir_abs_path, M2_PATH)
         shutil.rmtree(configured_dist_storing_loc, onerror=cm.on_rm_error)
         return database_names
     except FileNotFoundError as e:
@@ -173,7 +172,7 @@ def save_log_files():
     log_storage = Path(cm.workspace + "/" + LOG_STORAGE)
     if not Path.exists(log_storage):
         Path(log_storage).mkdir(parents=True, exist_ok=True)
-    log_file_paths = ARTIFACT_REPORTS_PATHS[cm.product_id]
+    log_file_paths = ARTIFACT_REPORTS_PATHS
     if log_file_paths:
         for file in log_file_paths:
             absolute_file_path = Path(cm.workspace + "/" + cm.product_id + "/" + file)
@@ -193,7 +192,7 @@ def copy_file(source, target):
             target = cm.winapi_path(target)
 
         if os.path.isdir(source):
-            shutil.copytree(source, target, ignore=cm.ignore_dirs((IGNORE_DIR_TYPES[cm.product_id])))
+            shutil.copytree(source, target, ignore=cm.ignore_dirs(IGNORE_DIR_TYPES))
         else:
             shutil.copy(source, target)
     except OSError as e:
@@ -205,7 +204,7 @@ def save_test_output():
     report_folder = Path(cm.workspace + "/" + TEST_OUTPUT_DIR_NAME)
     if Path.exists(report_folder):
         shutil.rmtree(report_folder)
-    report_file_paths = ARTIFACT_REPORTS_PATHS[cm.product_id]
+    report_file_paths = ARTIFACT_REPORTS_PATHS
     for key, value in report_file_paths.items():
         for file in value:
             absolute_file_path = Path(cm.workspace + "/" + cm.product_id + "/" + file)
@@ -219,21 +218,20 @@ def save_test_output():
 
 #TODO: Improve the method in generic way to support all products
 # def set_custom_testng():
-#     if use_custom_testng_file == "TRUE":
-#         testng_source = Path(workspace + "/" + "testng.xml")
-#         testng_destination = Path(workspace + "/" + product_id + "/" + TESTNG_DIST_XML_PATH)
-#         testng_server_mgt_source = Path(workspace + "/" + "testng-server-mgt.xml")
-#         testng_server_mgt_destination = Path(workspace + "/" + product_id + "/" + TESTNG_SERVER_MGT_DIST)
+#     if cm.use_custom_testng_file == "TRUE":
+#         testng_source = Path(cm.workspace + "/" + "testng.xml")
+#         testng_destination = Path(cm.workspace + "/" + cm.product_id + "/" + TESTNG_DIST_XML_PATHS)
+#         testng_server_mgt_source = Path(cm.workspace + "/" + "testng-server-mgt.xml")
+#         testng_server_mgt_destination = Path(cm.workspace + "/" + cm.product_id + "/" + TESTNG_SERVER_MGT_DIST)
 #         # replace testng source
-#         replace_file(testng_source, testng_destination)
+#         cm.replace_file(testng_source, testng_destination)
 #         # replace testng server mgt source
-# replace_file(testng_server_mgt_source, testng_server_mgt_destination)
+#         cm.replace_file(testng_server_mgt_source, testng_server_mgt_destination)
 
 
 def get_db_meta_data(argument):
     switcher = DB_META_DATA
     return switcher.get(argument, False)
-
 
 
 def main():
@@ -255,11 +253,10 @@ def main():
 
 
         # get properties assigned to local variables
-        pom_path = DIST_POM_PATH[cm.product_id]
+        pom_path = DIST_POM_PATH
         engine = cm.db_engine.upper()
         db_meta_data = get_db_meta_data(engine)
-        distribution_path = DISTRIBUTION_PATH[cm.product_id]
-
+        distribution_path = DISTRIBUTION_PATH
 
         # construct database configuration
         cm.construct_db_config(db_meta_data)
@@ -269,6 +266,7 @@ def main():
         #set_custom_testng()
 
         if cm.test_mode == "RELEASE":
+            cm.checkout_to_tag()
             dist_name = cm.get_dist_name(pom_path)
             cm.get_latest_released_dist()
         elif cm.test_mode == "SNAPSHOT":
@@ -276,9 +274,7 @@ def main():
             # build the distribution for snapshot test mode
             cm.build_snapshot_dist(distribution_path)
         elif cm.test_mode == "WUM":
-            # todo after identify specific steps that are related to WUM, add them to here
-            dist_name = cm.get_dist_name(pom_path)
-            logger.info("WUM specific steps are empty")
+            dist_name = cm.get_dist_name_wum()
 
         # populate databases
         db_names = configure_product()
@@ -289,7 +285,7 @@ def main():
         if cm.product_id == "product-apim":
             module_path = Path(cm.workspace + "/" + cm.product_id + "/" + 'modules/api-import-export')
             cm.build_module(module_path)
-        intg_module_path = Path(cm.workspace + "/" + cm.product_id + "/" + INTEGRATION_PATH[cm.product_id])
+        intg_module_path = Path(cm.workspace + "/" + cm.product_id + "/" + INTEGRATION_PATH)
         cm.build_module(intg_module_path)
         save_test_output()
         cm.create_output_property_fle()
