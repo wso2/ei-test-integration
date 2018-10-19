@@ -37,4 +37,4 @@ source $WD/env/bin/activate
 env/bin/pip3 install -r requirements.txt
 
 # run the run-intg-test.py script
-python prod_test_manager.py
+python run-intg-test.py
