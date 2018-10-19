@@ -150,6 +150,8 @@ if [ "${os}" = "Windows" ]; then
   echo "=== Files copied successfully ==="
   echo "Execution begins.. "
 
+  set +e #avoid exiting before files are copied from remote server
+
   sshpass -p "${password}" ssh -o StrictHostKeyChecking=no ${user}@${host} "${REM_DIR}/${FILE8}" ${REM_DIR}
   echo "=== End of execution ==="
   echo "Retrieving reports from instance.. "
@@ -170,6 +172,8 @@ else
   [ -d ${DIR1} ] && scp -o StrictHostKeyChecking=no -i ${key_pem} -r ${DIR1} ${user}@${host}:${REM_DIR}
 
   echo "=== Files copied successfully ==="
+
+  set +e #avoid exiting before files are copied from remote server
 
   ssh -o StrictHostKeyChecking=no -i ${key_pem} ${user}@${host} bash ${REM_DIR}/intg-test-runner.sh --wd ${REM_DIR}
 
