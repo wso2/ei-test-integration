@@ -108,6 +108,9 @@ case "${os}" in
    "CentOS")
     	user=centos
         PROP_REMOTE_DIR=REMOTE_WORKSPACE_DIR_UNIX ;;
+   "RHEL")
+    	user=centos
+        PROP_REMOTE_DIR=REMOTE_WORKSPACE_DIR_UNIX ;;
    "Windows")
     	user=Administrator
         PROP_REMOTE_DIR=REMOTE_WORKSPACE_DIR_WINDOWS ;;
