@@ -28,8 +28,7 @@ get_cmn_scripts_dwld
 
 DIR=$2
 DIR1=integration
-FILE1=${DIR}/infrastructure.properties
-FILE2=${DIR}/testplan-props.properties
+FILE1=${DIR}/deployment.properties
 FILE3=run-intg-test.py
 FILE4=intg_test_manager.py
 FILE5=intg_test_constant.py
@@ -49,13 +48,13 @@ PROP_INSTANCE_ID=WSO2InstanceId  #Physical ID (Resource ID) of WSO2 EC2 Instance
 #----------------------------------------------------------------------
 # getting data from databuckets
 #----------------------------------------------------------------------
-key_pem=`grep -w "$PROP_KEY" ${FILE1} ${FILE2} | cut -d'=' -f2`
+key_pem=`grep -w "$PROP_KEY" ${FILE1} | cut -d'=' -f2`
 os=`cat ${FILE2} | grep -w "$PROP_OS" ${FILE1} | cut -d'=' -f2`
 #user=`cat ${FILE2} | grep -w "$PROP_USER" ${FILE1} ${FILE2} | cut -d'=' -f2`
-instance_id=`cat ${FILE2} | grep -w "$PROP_INSTANCE_ID" ${FILE1} ${FILE2} | cut -d'=' -f2`
+instance_id=`cat ${FILE2} | grep -w "$PROP_INSTANCE_ID" ${FILE1} | cut -d'=' -f2`
 user=''
 password=''
-host=`grep -w "$PROP_HOST" ${FILE1} ${FILE2} | cut -d'=' -f2`
+host=`grep -w "$PROP_HOST" ${FILE1} | cut -d'=' -f2`
 CONNECT_RETRY_COUNT=20
 
 #=== FUNCTION ==================================================================
@@ -155,7 +154,6 @@ if [ "${os}" = "Windows" ]; then
   REM_DIR=$(echo "$REM_DIR" | sed 's/\\//g')
   echo "Copying files to ${REM_DIR}.."
   sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${FILE1} ${user}@${host}:${REM_DIR}
-  sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${FILE2} ${user}@${host}:${REM_DIR}
   sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${FILE3} ${user}@${host}:${REM_DIR}
   sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${FILE4} ${user}@${host}:${REM_DIR}
   sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${FILE5} ${user}@${host}:${REM_DIR}
@@ -180,7 +178,6 @@ else
   #for all UNIX instances
   ssh -o StrictHostKeyChecking=no -i ${key_pem} ${user}@${host} mkdir -p ${REM_DIR}
   scp -o StrictHostKeyChecking=no -i ${key_pem} ${FILE1} ${user}@${host}:${REM_DIR}
-  scp -o StrictHostKeyChecking=no -i ${key_pem} ${FILE2} ${user}@${host}:${REM_DIR}
   scp -o StrictHostKeyChecking=no -i ${key_pem} ${FILE3} ${user}@${host}:${REM_DIR}
   scp -o StrictHostKeyChecking=no -i ${key_pem} ${FILE4} ${user}@${host}:${REM_DIR}
   scp -o StrictHostKeyChecking=no -i ${key_pem} ${FILE5} ${user}@${host}:${REM_DIR}
