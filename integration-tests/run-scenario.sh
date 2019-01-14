@@ -26,9 +26,10 @@ echo "=== Copied common scripts. ==="
 
 get_cmn_scripts_dwld
 
-DIR=$2
+INPUTS_DIR=$2
+OUTPUTS_DIR=$4
 DIR1=integration
-FILE1=${DIR}/deployment.properties
+FILE1=${INPUTS_DIR}/deployment.properties
 FILE2=run-intg-test.py
 FILE3=intg_test_manager.py
 FILE4=intg_test_constant.py
@@ -194,8 +195,8 @@ else
 
   echo "=== End of execution ==="
   #Get the reports from integration test
-  scp -o StrictHostKeyChecking=no -r -i ${key_pem} ${user}@${host}:${REM_DIR}/surefire-reports ${DIR}
-  scp -o StrictHostKeyChecking=no -r -i ${key_pem} ${user}@${host}:${REM_DIR}/output.properties ${DIR}
+  scp -o StrictHostKeyChecking=no -r -i ${key_pem} ${user}@${host}:${REM_DIR}/surefire-reports ${OUTPUTS_DIR}/integration-tests
+  scp -o StrictHostKeyChecking=no -r -i ${key_pem} ${user}@${host}:${REM_DIR}/output.properties ${OUTPUTS_DIR}/integration-tests
   echo "=== Reports are copied success ==="
 fi
 ##script ends
