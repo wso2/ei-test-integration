@@ -171,8 +171,9 @@ if [ "${os}" = "Windows" ]; then
   sshpass -p "${password}" ssh -o StrictHostKeyChecking=no ${user}@${host} "${REM_DIR}/${FILE7}" ${REM_DIR}
   echo "=== End of execution ==="
   echo "Retrieving reports from instance.. "
-  sshpass -p "${password}" scp -r -q -o StrictHostKeyChecking=no ${user}@${host}:${REM_DIR}/surefire-reports ${DIR}
-  sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${user}@${host}:${REM_DIR}/output.properties ${DIR}
+  mkdir -p ${OUTPUTS_DIR}/integration-tests
+  sshpass -p "${password}" scp -r -q -o StrictHostKeyChecking=no ${user}@${host}:${REM_DIR}/surefire-reports ${OUTPUTS_DIR}/integration-tests
+  sshpass -p "${password}" scp -q -o StrictHostKeyChecking=no ${user}@${host}:${REM_DIR}/output.properties ${OUTPUTS_DIR}/integration-tests
   echo "=== Reports retrieved successfully ==="
   set -o xtrace
 else
@@ -194,6 +195,7 @@ else
   ssh -o StrictHostKeyChecking=no -i ${key_pem} ${user}@${host} bash ${REM_DIR}/intg-test-runner.sh --wd ${REM_DIR}
 
   echo "=== End of execution ==="
+  mkdir -p ${OUTPUTS_DIR}/integration-tests
   #Get the reports from integration test
   scp -o StrictHostKeyChecking=no -r -i ${key_pem} ${user}@${host}:${REM_DIR}/surefire-reports ${OUTPUTS_DIR}/integration-tests
   scp -o StrictHostKeyChecking=no -r -i ${key_pem} ${user}@${host}:${REM_DIR}/output.properties ${OUTPUTS_DIR}/integration-tests
