@@ -74,7 +74,7 @@ install_jdk ${JDK_TYPE}
 if [[ ${DB_TYPE} == "oracle-se2" ]]; then
 # export env for oracle-19
 export TestGrid=true
-export oracle_url="jdbc:oracle:thin:DB_HOST:1521/${CF_DB_NAME}"
+export oracle_url="jdbc:oracle:thin:${CF_DB_HOST}:1521/${CF_DB_NAME}"
 export oracle_user="MI_DB"
 export oracle_pwd="${CF_DB_PASSWORD}"
 fi
