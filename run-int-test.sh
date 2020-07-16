@@ -71,6 +71,14 @@ git clone https://$PRODUCT_REPOSITORY $TESTGRID_DIR/${PRODUCT_REPOSITORY_NAME} -
 log_info "Exporting JDK"
 install_jdk ${JDK_TYPE}
 
+if [[ ${DB_TYPE} == "oracle-se2" ]]; then
+# export env for oracle-19
+export TestGrid=true
+export oracle_url="jdbc:oracle:thin:DB_HOST:1521/${CF_DB_NAME}"
+export oracle_user="${CF_DB_USERNAME}"
+export oracle_pwd="${CF_DB_PASSWORD}"
+fi
+
 mkdir -p $PRODUCT_REPOSITORY_PACK_DIR
 
 log_info "Copying product pack to Repository"
@@ -78,4 +86,8 @@ log_info "Copying product pack to Repository"
 cd $TESTGRID_DIR && zip -qr $PRODUCT_NAME-$PRODUCT_VERSION-SNAPSHOT.zip $PRODUCT_NAME-$PRODUCT_VERSION-*
 mv $TESTGRID_DIR/$PRODUCT_NAME-$PRODUCT_VERSION-SNAPSHOT.zip $PRODUCT_REPOSITORY_PACK_DIR/.
 
-cd $INT_TEST_MODULE_DIR  && mvn clean install -fae -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+if [[ ${DB_TYPE} == "oracle-se2" ]]; then
+    cd $INT_TEST_MODULE_DIR  && mvn clean install -P db-tests -fae -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+else
+    cd $INT_TEST_MODULE_DIR  && mvn clean install -fae -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+fi
