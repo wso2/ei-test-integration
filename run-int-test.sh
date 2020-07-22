@@ -38,8 +38,8 @@ CF_DB_USERNAME=$(grep -w "CF_DB_USERNAME" ${CFN_PROP_FILE} | cut -d"=" -f2)
 CF_DB_HOST=$(grep -w "CF_DB_HOST" ${CFN_PROP_FILE} | cut -d"=" -f2)
 CF_DB_PORT=$(grep -w "CF_DB_PORT" ${CFN_PROP_FILE} | cut -d"=" -f2)
 CF_DB_NAME=$(grep -w "SID" ${CFN_PROP_FILE} | cut -d"=" -f2)
-#TODO: db-name
 
+REMOTE_PACK_NAME=$(grep -w "REMOTE_PACK_NAME" ${CFN_PROP_FILE} | cut -d= -f2)
 
 
 function log_info(){
@@ -82,9 +82,9 @@ fi
 mkdir -p $PRODUCT_REPOSITORY_PACK_DIR
 
 log_info "Copying product pack to Repository"
-[ -f $TESTGRID_DIR/$PRODUCT_NAME-$PRODUCT_VERSION-SNAPSHOT.zip ] && rm -f $TESTGRID_DIR/$PRODUCT_NAME-$PRODUCT_VERSION-SNAPSHOT.zip
-cd $TESTGRID_DIR && zip -qr $PRODUCT_NAME-$PRODUCT_VERSION-SNAPSHOT.zip $PRODUCT_NAME-$PRODUCT_VERSION-SNAPSHOT
-mv $TESTGRID_DIR/$PRODUCT_NAME-$PRODUCT_VERSION-SNAPSHOT.zip $PRODUCT_REPOSITORY_PACK_DIR/.
+[ -f $TESTGRID_DIR/$REMOTE_PACK_NAME.zip ] && rm -f $TESTGRID_DIR/$REMOTE_PACK_NAME.zip
+cd $TESTGRID_DIR && zip -qr $REMOTE_PACK_NAME.zip $REMOTE_PACK_NAME
+mv $TESTGRID_DIR/$REMOTE_PACK_NAME.zip $PRODUCT_REPOSITORY_PACK_DIR/.
 
 if [[ ${DB_TYPE} == "oracle-se2" ]]; then
     cd $INT_TEST_MODULE_DIR  && mvn clean install -P db-tests -fae -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
