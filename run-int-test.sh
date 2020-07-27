@@ -18,16 +18,13 @@ set -o xtrace; set -e
 
 TESTGRID_DIR=/opt/testgrid/workspace
 INFRA_JSON='infra.json'
-
 PRODUCT_REPOSITORY=$1
 PRODUCT_REPOSITORY_BRANCH=$2
 PRODUCT_NAME=$3
 PRODUCT_VERSION=$4
-
 PRODUCT_REPOSITORY_NAME=$(echo $PRODUCT_REPOSITORY | rev | cut -d'/' -f1 | rev | cut -d'.' -f1)
 PRODUCT_REPOSITORY_PACK_DIR="$TESTGRID_DIR/$PRODUCT_REPOSITORY_NAME/distribution/target"
 INT_TEST_MODULE_DIR="$TESTGRID_DIR/$PRODUCT_REPOSITORY_NAME/integration"
-
 # cloud formation properties
 CFN_PROP_FILE="${TESTGRID_DIR}/cfn-props.properties"
 JDK_TYPE=$(grep -w "JDK_TYPE" ${CFN_PROP_FILE} | cut -d"=" -f2)
@@ -38,7 +35,6 @@ CF_DB_USERNAME=$(grep -w "CF_DB_USERNAME" ${CFN_PROP_FILE} | cut -d"=" -f2)
 CF_DB_HOST=$(grep -w "CF_DB_HOST" ${CFN_PROP_FILE} | cut -d"=" -f2)
 CF_DB_PORT=$(grep -w "CF_DB_PORT" ${CFN_PROP_FILE} | cut -d"=" -f2)
 CF_DB_NAME=$(grep -w "SID" ${CFN_PROP_FILE} | cut -d"=" -f2)
-
 REMOTE_PACK_NAME=$(grep -w "REMOTE_PACK_NAME" ${CFN_PROP_FILE} | cut -d= -f2)
 
 
@@ -72,11 +68,11 @@ log_info "Exporting JDK"
 install_jdk ${JDK_TYPE}
 
 if [[ ${DB_TYPE} == "oracle-se2" ]]; then
-# export env for oracle-19
-export TestGrid=true
-export oracle_url="jdbc:oracle:thin:@${CF_DB_HOST}:1521/${CF_DB_NAME}"
-export oracle_user="MI_DB"
-export oracle_pwd="${CF_DB_PASSWORD}"
+    # export env for oracle-19
+    export TestGrid=true
+    export oracle_url="jdbc:oracle:thin:@${CF_DB_HOST}:1521/${CF_DB_NAME}"
+    export oracle_user="MI_DB"
+    export oracle_pwd="${CF_DB_PASSWORD}"
 fi
 
 mkdir -p $PRODUCT_REPOSITORY_PACK_DIR
