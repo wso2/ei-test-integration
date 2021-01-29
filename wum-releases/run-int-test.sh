@@ -28,6 +28,7 @@ GIT_PASS=$6
 PRODUCT_REPOSITORY_NAME=$(echo $PRODUCT_REPOSITORY | rev | cut -d'/' -f1 | rev | cut -d'.' -f1)
 LOCAL_PRODUCT_PACK_LOCATION="$HOME/.wum3/products/${PRODUCT_NAME}/${PRODUCT_VERSION}/full"
 PRODUCT_REPOSITORY_PACK_DIR="$WORKING_DIR/$PRODUCT_REPOSITORY_NAME/distribution/target"
+PRODUCT_REPOSITORY_DIR="$WORKING_DIR/$PRODUCT_REPOSITORY_NAME"
 INT_TEST_MODULE_DIR="$WORKING_DIR/$PRODUCT_REPOSITORY_NAME/integration"
 NEXUS_SCRIPT_NAME="uat-nexus-settings.xml"
 INFRA_JSON="infra.json"
@@ -66,11 +67,14 @@ git clone https://${GIT_USER}:${GIT_PASS}@$PRODUCT_REPOSITORY --branch $PRODUCT_
 
 mkdir -p $PRODUCT_REPOSITORY_PACK_DIR
 
+install_jdk $JDK_TYPE
+
+log_info "Executing mvn install from product repository directory"
+cd $PRODUCT_REPOSITORY_DIR && mvn clean install -Dmaven.test.skip=true
+
 log_info "Copying product pack to Repository"
 cp $LOCAL_PRODUCT_PACK_LOCATION/$PRODUCT_NAME-$PRODUCT_VERSION+*.zip $PRODUCT_REPOSITORY_PACK_DIR/$PRODUCT_NAME-$PRODUCT_VERSION.zip
 cd ${WORKING_DIR}
 mv $WORKING_DIR/$NEXUS_SCRIPT_NAME $INT_TEST_MODULE_DIR/.
-
-install_jdk $JDK_TYPE
 
 cd $INT_TEST_MODULE_DIR  && mvn clean install -U -s $NEXUS_SCRIPT_NAME -fae -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
