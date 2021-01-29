@@ -17,6 +17,10 @@
 
 set -o xtrace
 
+sysctl -w fs.file-max=2097152
+#sysctl -p
+echo "Max open files: $(ulimit -a)"
+
 WORKING_DIR=$(pwd)
 PRODUCT_REPOSITORY=$1
 PRODUCT_REPOSITORY_BRANCH=$2
