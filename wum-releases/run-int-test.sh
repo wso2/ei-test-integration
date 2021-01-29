@@ -28,6 +28,7 @@ GIT_PASS=$6
 PRODUCT_REPOSITORY_NAME=$(echo $PRODUCT_REPOSITORY | rev | cut -d'/' -f1 | rev | cut -d'.' -f1)
 LOCAL_PRODUCT_PACK_LOCATION="$HOME/.wum3/products/${PRODUCT_NAME}/${PRODUCT_VERSION}/full"
 PRODUCT_REPOSITORY_PACK_DIR="$WORKING_DIR/$PRODUCT_REPOSITORY_NAME/distribution/target"
+PRODUCT_REPOSITORY_PACK="$WORKING_DIR/ei-6.6.0"
 INT_TEST_MODULE_DIR="$WORKING_DIR/$PRODUCT_REPOSITORY_NAME/integration"
 NEXUS_SCRIPT_NAME="uat-nexus-settings.xml"
 INFRA_JSON="infra.json"
@@ -66,8 +67,12 @@ git clone https://${GIT_USER}:${GIT_PASS}@$PRODUCT_REPOSITORY --branch $PRODUCT_
 
 mkdir -p $PRODUCT_REPOSITORY_PACK_DIR
 
-log_info "Copying product pack to m2"
-wget -q -P /root/.m2/repository/org/wso2/ei/wso2ei/6.6.0 https://github.com/wso2/product-ei/releases/download/v6.6.0/wso2ei-6.6.0.zip
+#log_info "Copying product pack to m2"
+#wget -q -P /root/.m2/repository/org/wso2/ei/wso2ei/6.6.0 https://github.com/wso2/product-ei/releases/download/v6.6.0/wso2ei-6.6.0.zip
+
+log_info "Installing product pack to m2"
+wget -q -P $PRODUCT_REPOSITORY_PACK https://github.com/wso2/product-ei/releases/download/v6.6.0/wso2ei-6.6.0.zip
+mvn install:install-file -Dfile=$PRODUCT_REPOSITORY_PACK/wso2ei-6.6.0.zip -DgroupId=org.wso2.ei -DartifactId=wso2ei-parent -Dversion=6.6.0 -Dpackaging=zip -DgeneratePom=true
 
 log_info "Copying product pack to Repository"
 cp $LOCAL_PRODUCT_PACK_LOCATION/$PRODUCT_NAME-$PRODUCT_VERSION+*.zip $PRODUCT_REPOSITORY_PACK_DIR/$PRODUCT_NAME-$PRODUCT_VERSION.zip
