@@ -66,6 +66,9 @@ git clone https://${GIT_USER}:${GIT_PASS}@$PRODUCT_REPOSITORY --branch $PRODUCT_
 
 mkdir -p $PRODUCT_REPOSITORY_PACK_DIR
 
+log_info "Copying product pack to m2"
+wget -q -P /root/.m2/repository/org/wso2/ei/wso2ei/6.6.0 https://github.com/wso2/product-ei/releases/download/v6.6.0/wso2ei-6.6.0.zip
+
 log_info "Copying product pack to Repository"
 cp $LOCAL_PRODUCT_PACK_LOCATION/$PRODUCT_NAME-$PRODUCT_VERSION+*.zip $PRODUCT_REPOSITORY_PACK_DIR/$PRODUCT_NAME-$PRODUCT_VERSION.zip
 cd ${WORKING_DIR}
