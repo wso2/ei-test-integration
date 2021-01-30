@@ -17,6 +17,13 @@
 
 set -o xtrace
 
+sysctl -w fs.file-max=2097152
+echo "File max: $(sysctl fs.file-max)"
+ulimit -n 65535
+echo "Ulimit soft: $(ulimit -Sn)"
+echo "Ulimit hard: $(ulimit -Hn)"
+echo "Ulimit all: $(ulimit -a)"
+
 WORKING_DIR=$(pwd)
 PRODUCT_REPOSITORY=$1
 PRODUCT_REPOSITORY_BRANCH=$2
