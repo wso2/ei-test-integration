@@ -78,8 +78,8 @@ mkdir -p $PRODUCT_REPOSITORY_PACK_DIR
 #wget -q -P /root/.m2/repository/org/wso2/ei/wso2ei/6.6.0 https://github.com/wso2/product-ei/releases/download/v6.6.0/wso2ei-6.6.0.zip
 
 log_info "Installing product pack to m2"
-wget -q -P $PRODUCT_REPOSITORY_PACK https://github.com/wso2/product-ei/releases/download/v6.6.0/wso2ei-6.6.0.zip
-mvn install:install-file -Dfile=$PRODUCT_REPOSITORY_PACK/wso2ei-6.6.0.zip -DgroupId=org.wso2.ei -DartifactId=wso2ei-parent -Dversion=6.6.0 -Dpackaging=zip -DgeneratePom=true
+wget -P $PRODUCT_REPOSITORY_PACK https://github.com/wso2/product-ei/releases/download/v6.6.0/wso2ei-6.6.0.zip
+mvn install:install-file -Dfile=$PRODUCT_REPOSITORY_PACK/wso2ei-6.6.0.zip -DgroupId=org.wso2.ei -DartifactId=wso2ei -Dversion=6.6.0 -Dpackaging=zip -DgeneratePom=true
 
 log_info "Copying product pack to Repository"
 cp $LOCAL_PRODUCT_PACK_LOCATION/$PRODUCT_NAME-$PRODUCT_VERSION+*.zip $PRODUCT_REPOSITORY_PACK_DIR/$PRODUCT_NAME-$PRODUCT_VERSION.zip
