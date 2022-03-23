@@ -61,7 +61,7 @@ source /etc/environment
 
 log_info "Clone Product repository"
 git clone https://$PRODUCT_REPOSITORY $TESTGRID_DIR/${PRODUCT_REPOSITORY_NAME} --branch $PRODUCT_REPOSITORY_BRANCH
-
+yum install jq -y
 log_info "Exporting JDK"
 install_jdk ${JDK_TYPE}
 
